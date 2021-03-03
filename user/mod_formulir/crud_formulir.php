@@ -43,16 +43,21 @@ if ($pg == 'simpandatadiri') {
 
 if ($pg == 'simpansetup') {
     $status = (isset($_POST['status'])) ? 1 : 0;
+    $sekolah = ($_POST['sekolah'] == 99 ? $_POST['asal_sekolah'] : $_POST['sekolah']);
+    $password = (!empty($_POST['password2']) ? $_POST['password2'] : dekripsi($_POST['tempPassword']));
     $data = [
         'nama'              => mysqli_escape_string($koneksi, $_POST['fullname']),
+        'asal_sekolah'      => $sekolah,
         'jurusan'           => $_POST['jurusan1'],
         'jurusan2'          => $_POST['jurusan2'],
-        'password'          => $_POST['password2'],
+        'password'          => $password,
         'aktif'             => 1
     ];
 
+    $exec1 = insert($koneksi, 'sekolah', ['npsn' => null, 'nama_sekolah' => $sekolah, 'alamat' => null, 'status' => 1]);
+
     $exec = update($koneksi, 'daftar', $data, ['id_daftar' => $id]);
-    if ($exec) {
+    if ($exec && $exec1) {
         $pesan = [
             'pesan' => 'ok'
         ];
@@ -80,7 +85,6 @@ if ($pg == 'simpanalamat') {
         'jarak'             => $_POST['jarak'],
         'waktu'             => $_POST['waktu'],
         'transportasi'      => $_POST['transportasi']
-
     ];
 
     $exec = update($koneksi, 'daftar', $data, ['id_daftar' => $id]);

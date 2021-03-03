@@ -22,10 +22,13 @@
                       </div>
                   </div>
 
+                  <input type="hidden" name="tempPassword" value="<?= enkripsi($siswa['password']) ?>">
+
                   <div class="form-group row mb-2">
                       <label class="col-form-label text-md-right col-12 col-md-4 col-lg-4">Buat Password Baru</label>
                       <div class="col-sm-12 col-md-7">
                           <input type="password" name="password1" id="password1" class="form-control">
+                          <small class="text-danger">Kosongkan Password jika tidak ada perubahan</small>
                       </div>
                   </div>
 
@@ -61,6 +64,27 @@
                           </select>
                       </div>
                   </div>
+
+                  <div class="form-group row mb-2">
+                      <label class="col-form-label text-md-right col-12 col-md-4 col-lg-4">Asal Sekolah</label>
+                      <div class="col-sm-12 col-md-7">
+                          <select name="sekolah" id="sekolah" class="form-control">
+                            <option value="" selected> -- Pilih Salah Satu -- </option>
+                            <?php $getSekolah = mysqli_query($koneksi, "SELECT * FROM sekolah WHERE status = 1"); ?> 
+                            <?php while($row = mysqli_fetch_assoc($getSekolah)) : ?>
+                                <option value="<?= $row['nama_sekolah'] ?>"> <?= $row['nama_sekolah'] ?></option>
+                            <?php endwhile ?>
+                            <option value="99"> Lainnya </option>
+                          </select>
+                      </div>
+                  </div>
+                  
+                  <div class="form-group row mb-2" id="inputSekolah">
+                      <div class="col-sm-12 col-md-7">
+                          <input type="text" name="asal_sekolah" id="asal_sekolah" class="form-control">
+                      </div>
+                  </div>
+
                   
                   <div class="form-group row">
                     <div class="offset-sm-4 col-sm-8">
@@ -81,9 +105,20 @@
     
 </div>
 <script>
+    $("#inputSekolah").hide();
+
     $('.form-control').keyup(function(event) {
 
         $(this).val($(this).val().toUpperCase());
+    });
+
+    $('#sekolah').change(function(e) {  
+      if( $(this).val() != "99") {
+        $("#inputSekolah").hide();
+      } else {
+        $("#inputSekolah").show();
+      }
+      
     });
 
     jQuery.validator.setDefaults({
@@ -100,13 +135,12 @@
             letterswithbasicpunc: true 
           },
 
-          password1: {
-            required: true,
-            minlength: 6
-          },
+          // password1: {
+          //   required: true,
+          //   minlength: 6
+          // },
 
           password2: {
-            required: true,
             minlength: 6,
             equalTo: password1
           },
@@ -118,8 +152,12 @@
           jurusan2: {
             required: true,
             notEqualTo: jurusan1
+          },
+
+          sekolah: {
+            required: true
           }
-        },
+        }
 
         
       });
@@ -146,7 +184,8 @@
                           
                       });
 
-                      window.location.href = "http://localhost/ppdb/user/"
+                      
+                      window.location.href = location.protocol + "//" + location.hostname + "/user/";
 
                       // iziToast.question({
                       //     timeout: 5000,

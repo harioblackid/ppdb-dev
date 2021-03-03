@@ -148,6 +148,11 @@
                                 <div class="form-group row mb-2">
                                     <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Asal Sekolah</label>
                                     <div class="col-sm-12 col-md-7">
+
+                                        <select name="asal" id="asal">
+                                            
+                                            <option value=""></option>
+                                        </select>
                                         <input type="text" name="asal" class="form-control" value="<?= $siswa['asal_sekolah'] ?>" required>
                                     </div>
                                 </div>
